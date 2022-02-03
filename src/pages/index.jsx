@@ -1,13 +1,13 @@
-import { useState, useEffect } from "react";
-import AppLayout from "components/AppLayout";
-import Button from "components/Button";
-import GitHub from "components/icons/github";
-import Head from "next/head";
-
-import { loginWithGitHub, onAuthStateChanged } from "fb/client";
-
-import styles from "styles/Home.module.css";
-import indexStyles from "styles/pages/index.module.css";
+import AppLayout from 'components/AppLayout';
+import Button from 'components/Button';
+import GitHub from 'components/icons/github';
+import { loginWithGitHub, onAuthStateChanged } from 'fb/client';
+import Head from 'next/head';
+import Image from 'next/image';
+import { useEffect, useState } from 'react';
+import styles from 'styles/Home.module.css';
+import indexStyles from 'styles/pages/index.module.css';
+import devterLogo from '../../public/devter-logo.png';
 
 export default function Home() {
   const [user, setUser] = useState(null);
@@ -18,12 +18,7 @@ export default function Home() {
   }, []);
 
   const handleLogin = () => {
-    loginWithGitHub()
-      .then(setUser)
-      .catch((err) => {
-        console.log("Error");
-        console.log(err);
-      });
+    loginWithGitHub().then(setUser).catch(setError);
   };
 
   const handleLogout = () => {
@@ -47,15 +42,26 @@ export default function Home() {
       <AppLayout>
         {error && <h1>{error}</h1>}
         <section className={indexStyles.home}>
-          <img src="/devter-logo.png" alt="Logo" />
+          <figure>
+            <Image src={devterLogo} alt="Logo" placeholder="blur" />
+          </figure>
+
           <h1>Devter</h1>
-          <h2>Developer's talk together 👩‍💻🧑‍💻👨‍💻</h2>
+          <h2>Developer&apos;s talk together 👩‍💻🧑‍💻👨‍💻</h2>
 
           <div>
             {user !== null ? (
               <div className={indexStyles.userinfo}>
                 <div>
-                  <img src={user?.avatar} alt={`${user?.username} avatar`} />
+                  <figure className="avatar">
+                    <Image
+                      src={user?.avatar}
+                      alt={`${user?.username} avatar`}
+                      width={64}
+                      height={64}
+                      className={indexStyles.avatar}
+                    />
+                  </figure>
                   <h3>@{user?.username}</h3>
                 </div>
                 <Button onClick={handleLogout}>Logout</Button>

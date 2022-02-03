@@ -1,24 +1,24 @@
-import { initializeApp } from "firebase/app";
+import { getApps, initializeApp } from 'firebase/app';
 import {
   getAuth,
-  signInWithPopup,
   GithubAuthProvider,
-  signOut as signOutFirebase,
   onAuthStateChanged as onAuthStateChangedFirebase,
-} from "firebase/auth";
+  signInWithPopup,
+  signOut as signOutFirebase,
+} from 'firebase/auth';
 
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "AIzaSyDo22nmM-YcKa7Dix-0AVFHWlDJk_7NSD8",
-  authDomain: "devtter-442e7.firebaseapp.com",
-  projectId: "devtter-442e7",
-  storageBucket: "devtter-442e7.appspot.com",
-  messagingSenderId: "358428276622",
-  appId: "1:358428276622:web:52f6bafa6a758222e496df",
-  measurementId: "G-N4TJB19440",
+  apiKey: 'AIzaSyDo22nmM-YcKa7Dix-0AVFHWlDJk_7NSD8',
+  authDomain: 'devtter-442e7.firebaseapp.com',
+  projectId: 'devtter-442e7',
+  storageBucket: 'devtter-442e7.appspot.com',
+  messagingSenderId: '358428276622',
+  appId: '1:358428276622:web:52f6bafa6a758222e496df',
+  measurementId: 'G-N4TJB19440',
 };
 
-const app = initializeApp(firebaseConfig);
+!getApps() && initializeApp(firebaseConfig);
 const auth = getAuth();
 
 function mapUserFromFireBaseAuth(user) {
@@ -26,7 +26,7 @@ function mapUserFromFireBaseAuth(user) {
     const { accessToken, email, displayName, photoURL, reloadUserInfo } = user;
     const username = reloadUserInfo.screenName;
 
-    localStorage.setItem("accessToken", accessToken);
+    localStorage.setItem('accessToken', accessToken);
 
     return {
       accessToken,

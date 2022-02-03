@@ -17,7 +17,7 @@
   font-size: 1.2rem;
 }
 
-.home > img {
+.home > figure {
   width: 4rem;
   height: 4rem;
   margin-left: 0.5rem;
@@ -27,7 +27,8 @@
   align-items: center;
 }
 
-.home > div > button, .userinfo > button {
+.home > div > button,
+.userinfo > button {
   background: var(--color-black);
   color: var(--color-white);
   font-weight: 800;
@@ -35,17 +36,17 @@
   border: none;
   border-radius: 99rem;
   cursor: pointer;
-  padding: .3rem 1.2rem;
-  transition: opacity .3s ease;
+  padding: 0.3rem 1.2rem;
+  transition: opacity 0.3s ease;
 }
 
 .home > div > button:hover {
-  opacity: .7;
+  opacity: 0.7;
   background: radial-gradient(var(--color-black), #666);
 }
 
 .home > div > button > :global(svg) {
-  margin-right: .5rem;
+  margin-right: 0.5rem;
 }
 
 .userinfo {
@@ -70,8 +71,11 @@
   font-size: 1rem;
 }
 
-.userinfo > div > img {
-  border-radius: 50%;
+.userinfo > div > .avatar {
   width: 5rem;
   display: flex;
+}
+
+.avatar {
+  border-radius: 50%;
 }

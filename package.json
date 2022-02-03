@@ -8,12 +8,14 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "next": "12.0.9",
-    "react": "17.0.2",
-    "react-dom": "17.0.2"
+    "firebase": "~9.6.6-202211222730",
+    "next": "~12.0.9",
+    "react": "~17.0.2",
+    "react-dom": "~17.0.2",
+    "styled-jsx": "~5.0.0"
   },
   "devDependencies": {
-    "eslint": "8.8.0",
-    "eslint-config-next": "12.0.9"
+    "eslint": "~8.8.0",
+    "eslint-config-next": "~∫12.0.9"
   }
 }

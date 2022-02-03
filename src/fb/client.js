@@ -1,4 +1,4 @@
-import { getApps, initializeApp } from 'firebase/app';
+import { initializeApp } from 'firebase/app';
 import {
   getAuth,
   GithubAuthProvider,
@@ -18,7 +18,7 @@ const firebaseConfig = {
   measurementId: 'G-N4TJB19440',
 };
 
-!getApps() && initializeApp(firebaseConfig);
+initializeApp(firebaseConfig);
 const auth = getAuth();
 
 function mapUserFromFireBaseAuth(user) {

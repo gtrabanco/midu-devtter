@@ -1,13 +1,14 @@
 import AppLayout from 'components/AppLayout';
+import Avatar from 'components/Avatar';
 import Button from 'components/Button';
 import GitHub from 'components/icons/github';
 import { loginWithGitHub, onAuthStateChanged } from 'fb/client';
 import Head from 'next/head';
 import Image from 'next/image';
+import devterLogo from 'public/devter-logo.png';
 import { useEffect, useState } from 'react';
 import styles from 'styles/Home.module.css';
 import indexStyles from 'styles/pages/index.module.css';
-import devterLogo from '../../public/devter-logo.png';
 
 export default function Home() {
   const [user, setUser] = useState(null);
@@ -52,18 +53,11 @@ export default function Home() {
           <div>
             {user !== null ? (
               <div className={indexStyles.userinfo}>
-                <div>
-                  <figure className="avatar">
-                    <Image
-                      src={user?.avatar}
-                      alt={`${user?.username} avatar`}
-                      width={64}
-                      height={64}
-                      className={indexStyles.avatar}
-                    />
-                  </figure>
-                  <h3>@{user?.username}</h3>
-                </div>
+                <Avatar
+                  src={user.avatar}
+                  alt={`${user?.username} avatar`}
+                  text={`@${user?.username}`}
+                />
                 <Button onClick={handleLogout}>Logout</Button>
               </div>
             ) : (

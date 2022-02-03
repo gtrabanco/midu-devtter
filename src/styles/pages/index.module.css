@@ -1,26 +1,34 @@
-.home {
-  display: grid;
-  height: 100%;
-  place-content: center;
-  place-items: center;
+.header {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  padding: 1rem 0 0;
+  margin-bottom: 1rem;
 }
 
-.home h1 {
+.header h1 {
   color: var(--color-secondary);
   font-size: 2rem;
   font-weight: 800;
   margin-bottom: 0.25rem;
 }
 
-.home h2 {
+.header h2 {
   color: var(--color-primary);
   font-size: 1.2rem;
 }
 
-.home > figure {
+.header > svg {
   width: 4rem;
   height: 4rem;
-  margin-left: 0.5rem;
+}
+
+.home {
+  display: flex;
+  height: 100%;
+  place-content: center;
+  place-items: center;
+  align-items: flex-start;
 }
 
 .home > div {

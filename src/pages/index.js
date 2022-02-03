@@ -2,10 +2,9 @@ import AppLayout from 'components/AppLayout';
 import Avatar from 'components/Avatar';
 import Button from 'components/Button';
 import GitHub from 'components/icons/github';
+import Logo from 'components/icons/logo';
 import { loginWithGitHub, onAuthStateChanged } from 'fb/client';
 import Head from 'next/head';
-import Image from 'next/image';
-import devterLogo from 'public/devter-logo.png';
 import { useEffect, useState } from 'react';
 import styles from 'styles/Home.module.css';
 import indexStyles from 'styles/pages/index.module.css';
@@ -41,15 +40,13 @@ export default function Home() {
       </Head>
 
       <AppLayout>
-        {error && <h1>{error}</h1>}
-        <section className={indexStyles.home}>
-          <figure>
-            <Image src={devterLogo} alt="Logo" placeholder="blur" />
-          </figure>
-
+        {error && <h1>{error}</h1>}{' '}
+        <div className={indexStyles.header}>
+          <Logo />
           <h1>Devter</h1>
           <h2>Developer&apos;s talk together 👩‍💻🧑‍💻👨‍💻</h2>
-
+        </div>
+        <section className={indexStyles.home}>
           <div>
             {user !== null ? (
               <div className={indexStyles.userinfo}>

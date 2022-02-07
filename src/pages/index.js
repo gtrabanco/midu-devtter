@@ -1,34 +1,31 @@
-import AppLayout from 'components/AppLayout';
 import Avatar from 'components/Avatar';
 import Button from 'components/Button';
 import GitHub from 'components/icons/github';
 import Logo from 'components/icons/logo';
-import { loginWithGitHub, onAuthStateChanged } from 'fb/client';
+import { loginWithGitHub, logOut } from 'fb/client';
+import useUser, { USER_STATES } from 'hooks/useUser';
 import Head from 'next/head';
+import Image from 'next/image';
+import { useRouter } from 'next/router';
+import loading from 'public/spinner.gif';
 import { useEffect, useState } from 'react';
-import styles from 'styles/Home.module.css';
 import indexStyles from 'styles/pages/index.module.css';
 
 export default function Home() {
-  const [user, setUser] = useState(null);
+  const { user } = useUser();
   const [error, setError] = useState(null);
+  const router = useRouter();
 
   useEffect(() => {
-    onAuthStateChanged(setUser);
-  }, []);
+    user && router.replace('/home');
+  }, [user, router]);
 
   const handleLogin = () => {
-    loginWithGitHub().then(setUser).catch(setError);
+    loginWithGitHub().catch(setError);
   };
 
   const handleLogout = () => {
-    // if ( typeof user?.signOut === typeof Function ) {
-    //   user.signOut().then(() => setUser(null)).catch(() => {
-    //     setError('Could not logout')
-    //   })
-    // }
-    user?.signOut();
-    setUser(null);
+    user && logOut();
   };
 
   return (
@@ -39,37 +36,36 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <AppLayout>
-        {error && <h1>{error}</h1>}{' '}
-        <div className={indexStyles.header}>
-          <Logo />
-          <h1>Devter</h1>
-          <h2>Developer&apos;s talk together 👩‍💻🧑‍💻👨‍💻</h2>
-        </div>
-        <section className={indexStyles.home}>
-          <div>
-            {user !== null ? (
-              <div className={indexStyles.userinfo}>
-                <Avatar
-                  src={user.avatar}
-                  alt={`${user?.username} avatar`}
-                  text={`@${user?.username}`}
-                />
-                <Button onClick={handleLogout}>Logout</Button>
-              </div>
-            ) : (
-              <Button onClick={handleLogin}>
-                <GitHub fill="white" width="1em" height="1em" />
-                Login with GitHub
-              </Button>
-            )}
-          </div>
-        </section>
-      </AppLayout>
+      {error && <h1>{error}</h1>}
+      <div className={indexStyles.header}>
+        <Logo />
+        <h1>Devter</h1>
+        <h2>Developer&apos;s talk together 👩‍💻🧑‍💻👨‍💻</h2>
+      </div>
+      <section className={indexStyles.home}>
+        <div>
+          {user === USER_STATES.NOT_LOGGED && (
+            <Button onClick={handleLogin}>
+              <GitHub fill="white" width="1em" height="1em" />
+              Login with GitHub
+            </Button>
+          )}
 
-      <footer className={styles.footer}>
-        <p>(c) 2022</p>
-      </footer>
+          {user && (
+            <div className={indexStyles.userinfo}>
+              <Avatar
+                src={user.avatar}
+                alt={`${user?.username} avatar`}
+                text={`@${user?.username}`}
+              />
+              <Button onClick={handleLogout}>Logout</Button>
+            </div>
+          )}
+          {user === USER_STATES.NOT_KNOWN && (
+            <Image src={loading} width="4rem" height="4rem" alt="Loading" />
+          )}
+        </div>
+      </section>
     </>
   );
 }

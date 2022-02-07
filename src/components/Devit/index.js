@@ -1,11 +1,25 @@
 import Avatar from 'components/Avatar';
 
-export default function Devit({ id, avatar, username, message }) {
+export default function Devit({
+  id,
+  avatar,
+  username,
+  content,
+  userid,
+  createdat,
+}) {
   return (
     <>
       <article>
-        <Avatar alt={username} src={avatar} />
-        <p>{message}</p>
+        <div>
+          <Avatar alt={username} src={avatar} />
+        </div>
+        <section>
+          <strong>@{username}</strong>
+          <span> · </span>
+          <date>{createdat}</date>
+        </section>
+        <p>{content}</p>
       </article>
       <style jsx>{`
         article {
@@ -18,6 +32,14 @@ export default function Devit({ id, avatar, username, message }) {
         }
         p {
           margin: 0;
+          line-height: 1.3125;
+        }
+        span {
+          margin: 0 0.5rem;
+        }
+        date {
+          color: #555;
+          font-size: 0.9rem;
         }
       `}</style>
     </>

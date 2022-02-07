@@ -1,39 +1,42 @@
-import AppLayout from 'components/AppLayout';
 import Devit from 'components/Devit';
+import { fetchLatestDevits } from 'fb/client';
+import useUser from 'hooks/useUser';
 import { useEffect, useState } from 'react';
 
 export default function HomePage() {
-  const API_URL = 'http://localhost:3000/api/statuses/home_timeline';
   const [timeline, setTimeline] = useState([]);
+  const { user } = useUser();
 
   useEffect(() => {
-    fetch(API_URL)
-      .then((data) => data.json())
-      .then((data) => {
-        setTimeline(data);
-      })
-      .catch(() => setTimeline([]));
-  }, [timeline, setTimeline]);
+    user &&
+      fetchLatestDevits()
+        .then((data) => {
+          setTimeline(data);
+        })
+        .catch(() => setTimeline([]));
+  }, [setTimeline, user]);
   return (
     <>
-      <AppLayout>
-        <header>
-          <h2>Inicio</h2>
-        </header>
-        <section>
-          {timeline &&
-            timeline.map(({ id, avatar, username, message }, k) => (
+      <header>
+        <h2>Inicio</h2>
+      </header>
+      <section>
+        {timeline &&
+          timeline.map(
+            ({ id, avatar, userName, content, userId, createdAt }) => (
               <Devit
                 id={id}
                 key={id}
                 avatar={avatar}
-                username={username}
-                message={message}
+                username={userName}
+                content={content}
+                userid={userId}
+                createdat={createdAt}
               />
-            ))}
-        </section>
-        <nav></nav>
-      </AppLayout>
+            )
+          )}
+      </section>
+      <nav></nav>
       <style jsx>{`
         header {
           align-items: center;

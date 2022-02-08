@@ -5,41 +5,50 @@ export default function Devit({
   avatar,
   username,
   content,
-  userid,
   createdat,
+  imgURL = null,
+  userid = null,
 }) {
   return (
     <>
       <article>
         <div>
-          <Avatar alt={username} src={avatar} />
+          <Avatar alt={`@${username} avatar`} src={avatar} />
         </div>
         <section>
-          <strong>@{username}</strong>
-          <span> · </span>
-          <date>{createdat}</date>
+          <header>
+            <strong>{username}</strong>
+            <span> · </span>
+            <div className="date" title={createdat}>
+              {createdat}
+            </div>
+          </header>
+          <p>{content}</p>
+          {imgURL && <img src={imgURL} />}
         </section>
-        <p>{content}</p>
       </article>
       <style jsx>{`
         article {
+          border-bottom: 1px solid #eee;
           display: flex;
-          padding: 0.8rem 1rem;
-          border-bottom: 0.1rem solid #eaf7ff;
+          padding: 10px 15px;
+        }
+        img {
+          border-radius: 10px;
+          height: auto;
+          margin-top: 10px;
+          width: 100%;
         }
         div {
-          padding-right: 0.6rem;
+          padding-right: 10px;
         }
         p {
-          margin: 0;
           line-height: 1.3125;
+          margin: 0;
         }
-        span {
-          margin: 0 0.5rem;
-        }
-        date {
+        .date {
           color: #555;
-          font-size: 0.9rem;
+          font-size: 14px;
         }
       `}</style>
     </>

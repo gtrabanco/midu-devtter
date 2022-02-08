@@ -2,12 +2,11 @@ import Avatar from 'components/Avatar';
 import Button from 'components/Button';
 import GitHub from 'components/icons/github';
 import Logo from 'components/icons/logo';
+import Loading from 'components/Loading';
 import { loginWithGitHub, logOut } from 'fb/client';
 import useUser, { USER_STATES } from 'hooks/useUser';
 import Head from 'next/head';
-import Image from 'next/image';
 import { useRouter } from 'next/router';
-import loading from 'public/spinner.gif';
 import { useEffect, useState } from 'react';
 import indexStyles from 'styles/pages/index.module.css';
 
@@ -61,9 +60,7 @@ export default function Home() {
               <Button onClick={handleLogout}>Logout</Button>
             </div>
           )}
-          {user === USER_STATES.NOT_KNOWN && (
-            <Image src={loading} width="4rem" height="4rem" alt="Loading" />
-          )}
+          {user === USER_STATES.NOT_KNOWN && <Loading size={50} />}
         </div>
       </section>
     </>

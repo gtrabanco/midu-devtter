@@ -1,4 +1,6 @@
 import Avatar from 'components/Avatar';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 export default function Devit({
   id,
@@ -6,12 +8,20 @@ export default function Devit({
   username,
   content,
   createdat,
+  timeago,
   imgURL = null,
   userid = null,
 }) {
+  const router = useRouter();
+
+  const handleNavigation = (event) => {
+    event.preventDefault();
+    router.push('/status/[id]', `/status/${id}`);
+  };
+
   return (
     <>
-      <article>
+      <article onClick={handleNavigation}>
         <div>
           <Avatar alt={`@${username} avatar`} src={avatar} />
         </div>
@@ -19,9 +29,19 @@ export default function Devit({
           <header>
             <strong>{username}</strong>
             <span> · </span>
-            <div className="date" title={createdat}>
-              {createdat}
-            </div>
+            <Link
+              href={{
+                pathname: '/status/[id]',
+                query: { id },
+              }}
+              as={`/status/${id}`}
+            >
+              <a>
+                <time className="date" title={createdat}>
+                  {timeago}
+                </time>
+              </a>
+            </Link>
           </header>
           <p>{content}</p>
           {imgURL && <img src={imgURL} />}
@@ -32,6 +52,10 @@ export default function Devit({
           border-bottom: 1px solid #eee;
           display: flex;
           padding: 10px 15px;
+        }
+        article:hover {
+          background: #ccc;
+          cursor: pointer;
         }
         img {
           border-radius: 10px;
@@ -46,9 +70,20 @@ export default function Devit({
           line-height: 1.3125;
           margin: 0;
         }
-        .date {
+        time {
           color: #555;
           font-size: 14px;
+        }
+        header > a {
+          color: #555;
+          font-size: 0.9rem;
+          text-decoration: none;
+        }
+        header > a:hover {
+          text-decoration: underline;
+        }
+        a {
+          text-decoration: none;
         }
       `}</style>
     </>

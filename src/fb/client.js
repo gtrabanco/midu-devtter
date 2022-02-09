@@ -16,48 +16,10 @@ import {
   Timestamp,
 } from 'firebase/firestore';
 import { getStorage, ref, uploadBytesResumable } from 'firebase/storage';
-
-const DATE_UNITS = {
-  date: 2419200,
-  week: 604800,
-  day: 86400,
-  hour: 3600,
-  minute: 60,
-  second: 1,
-};
-
-Timestamp.prototype.secsAgo = function () {
-  const dateTimestamp = +this.toDate();
-  const currentTimestamp = Date.now();
-
-  return (currentTimestamp - dateTimestamp) / 1000;
-};
-
-Timestamp.prototype.unitvalue = function () {
-  const secondsElapsed = this.secsAgo();
-
-  for (const [unit, secondsInUnit] of Object.entries(DATE_UNITS)) {
-    const match = secondsElapsed >= secondsInUnit || unit === 'second';
-
-    if (match) {
-      const value = Math.floor(secondsElapsed / secondsInUnit) * -1;
-
-      return { value, unit };
-    }
-  }
-};
+import timeAgo from 'lib/timeago';
 
 Timestamp.prototype.timeAgo = function (locale = 'en-GB') {
-  const { value = 0, unit = 'second' } = this.unitvalue();
-
-  let formater;
-  if (unit === 'date') {
-    formater = Intl.DateTimeFormat(locale, { dateStyle: 'short' });
-  } else {
-    formater = new Intl.RelativeTimeFormat(locale, 'short');
-  }
-
-  return formater.format(value, unit);
+  return timeAgo(this.toDate(), locale);
 };
 
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -81,8 +43,6 @@ function mapUserFromFireBaseAuth(user) {
     const { accessToken, email, displayName, photoURL, reloadUserInfo, uid } =
       user;
     const username = reloadUserInfo.screenName;
-
-    localStorage.setItem('accessToken', accessToken);
 
     return {
       uid,
@@ -146,8 +106,10 @@ export function fetchLatestDevits() {
       const { createdAt } = data;
       // const intl = new Intl.DateTimeFormat('es-ES');
       // const normalizedCreatedAt = intl.format(createdAt.toDate());
-      const normalizedCreatedAt = createdAt.timeAgo('es-ES');
-      return { ...data, id, createdAt: normalizedCreatedAt };
+      const normalizedCreatedAt = createdAt.toDate();
+      const timeago = createdAt.timeAgo('es-ES');
+
+      return { ...data, id, createdAt: normalizedCreatedAt, timeago };
     });
   });
 }
@@ -156,3 +118,5 @@ export function uploadImage(file) {
   const storageRef = ref(storage, `images/${file.name}`);
   return uploadBytesResumable(storageRef, file);
 }
+
+export { Timestamp };

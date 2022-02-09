@@ -39,6 +39,7 @@ export default function HomePage() {
               content,
               userId,
               createdAt,
+              timeago,
               imgURL = null,
             }) => (
               <Devit
@@ -49,6 +50,7 @@ export default function HomePage() {
                 content={content}
                 userid={userId}
                 createdat={createdAt}
+                timeago={timeago}
                 imgURL={imgURL}
               />
             )

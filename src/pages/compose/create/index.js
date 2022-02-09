@@ -1,26 +1,17 @@
 import Avatar from 'components/Avatar';
 import Button from 'components/Button';
-import { addDevit, uploadImage } from 'fb/client';
-import { getDownloadURL } from 'firebase/storage';
+import useDragFiles, { DRAG_STATES } from 'hooks/useDragFiles';
+import usePostDevit, { POST_DEVIT_STATUS } from 'hooks/usePostDevit';
 import useUser from 'hooks/useUser';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 const COMPOSE_STATES = {
   ERROR: -1,
   USER_NOT_KNOWN: 0,
   LOADING: 1,
   SUCCESS: 2,
-};
-
-const DRAG_IMAGE_STATES = {
-  ERROR: -1,
-  NONE: 0,
-  DRAG_OVER: 1,
-  UPDLOADING: 2,
-  UPLOADING_PAUSED: 3,
-  UPLOADING_COMPLETED: 4,
 };
 
 const VALID_FILE_TYPES = [
@@ -38,138 +29,62 @@ const VALID_FILE_TYPES = [
 
 export default function ComposeTweet() {
   const { user } = useUser();
+  const dragRef = useRef();
+  const { files, dragStatus, deleteFile } = useDragFiles({
+    ref: dragRef,
+    validMimeTypes: VALID_FILE_TYPES,
+    maxNumberOfFiles: 1,
+  });
+
+  const { status: postStatus, progress, postDevit } = usePostDevit();
   const [message, setMessage] = useState('');
   const [status, setStatus] = useState(COMPOSE_STATES.USER_NOT_KNOWN);
-
-  const [drag, setDrag] = useState(DRAG_IMAGE_STATES.NONE);
-  const [task, setTask] = useState(null);
-  const [taskInfo, setTaskInfo] = useState({});
-  const [imgURL, setImgURL] = useState(null);
   const [file, setFile] = useState(null);
 
   const router = useRouter();
-
-  const postDevit = useCallback(() => {
-    addDevit({
-      avatar: user.avatar,
-      userName: user.username,
-      userId: user.uid,
-      content: message,
-      imgURL,
-    })
-      .then((data) => {
-        setStatus(COMPOSE_STATES.SUCCESS);
-        router.push('/home');
-      })
-      .catch((err) => {
-        console.error(err);
-        setStatus(COMPOSE_STATES.ERROR);
-      });
-  }, [message, user, router, imgURL]);
-
-  useEffect(() => {
-    if (task) {
-      task.on(
-        'state_changed',
-        (snapshot) => {
-          const progress = Math.floor(
-            (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-          );
-          let status;
-          switch (snapshot.state) {
-            case 'paused':
-              status = DRAG_IMAGE_STATES.UPLOADING_PAUSED;
-              break;
-            case 'running':
-              status = DRAG_IMAGE_STATES.UPDLOADING;
-              break;
-            default:
-              // This should never change unless firebase library and api changed
-              status = snapshot.state;
-              console.error('Unknown status');
-              console.log(snapshot.state);
-              break;
-          }
-          setTaskInfo({ status, progress });
-        },
-        (error) => {
-          const status = DRAG_IMAGE_STATES.ERROR;
-          const progress = -1;
-          setTaskInfo({ status, progress, error });
-        },
-        async () => {
-          // Completed upload
-          setTaskInfo({});
-          const imgDownloadUrl = await getDownloadURL(task.snapshot.ref);
-          setImgURL(imgDownloadUrl);
-          setTask(null);
-          setFile(null);
-
-          postDevit();
-        }
-      );
-    }
-  }, [task, postDevit]);
 
   const handleChange = (event) => {
     setMessage(event.target?.value ?? '');
   };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    setStatus(COMPOSE_STATES.LOADING);
-    if (file) {
-      uploadFiles();
-    } else {
-      postDevit();
-    }
-  };
-
-  const handleDragEnter = (event) => {
-    event.preventDefault();
-    setDrag(DRAG_IMAGE_STATES.DRAG_OVER);
-  };
-
-  const handleDragLeave = (event) => {
-    event.preventDefault();
-    setDrag(DRAG_IMAGE_STATES.NONE);
-  };
-
-  const handleDrop = (event) => {
-    event.preventDefault();
-
-    if (event.dataTransfer.files.length === 0) {
-      return;
-    }
-
-    if (event.dataTransfer.files.length > 1 || imgURL !== null) {
-      return alert('You can not upload more than one archive per devit.');
-    }
-
-    if (!VALID_FILE_TYPES.includes(event.dataTransfer.files[0].type)) {
-      return alert(
-        'You can only upload image types: gif, png, jpeg, tiff, svg, apng, webp, bmp, pjpeg and icon'
-      );
-    }
-
-    setFile(event.dataTransfer.files[0]);
-    setDrag(DRAG_IMAGE_STATES.NONE);
-  };
+  const handleSubmit = useCallback(
+    (event) => {
+      event.preventDefault();
+      setStatus(COMPOSE_STATES.LOADING);
+      postDevit({
+        avatar: user.avatar,
+        userName: user.username,
+        userId: user.uid,
+        content: message,
+        file,
+      });
+    },
+    [file, message, user, postDevit]
+  );
 
   const handleDeleteImage = (event) => {
     event.preventDefault();
-    setFile(null);
+    deleteFile();
   };
 
-  const uploadFiles = () => {
-    if (file === null) return;
-    setDrag(DRAG_IMAGE_STATES.NONE);
-    const uploadTask = uploadImage(file);
-    setTask(uploadTask);
-  };
+  const isUploading =
+    postStatus === POST_DEVIT_STATUS.UPLOADING_IMAGE ||
+    postStatus === POST_DEVIT_STATUS.UPLOADING_IMAGE_PAUSE;
 
-  const isButtonDisabled =
-    message.length === 0 || status === COMPOSE_STATES.LOADING;
+  const isButtonDisabled = message.length === 0 || isUploading;
+
+  useEffect(() => {
+    if (files.length === 0 || files.length === 1) {
+      setFile(files[0]);
+    }
+  }, [files, setFile]);
+
+  useEffect(() => {
+    if (postStatus === POST_DEVIT_STATUS.COMPLETED) {
+      console.log(postStatus);
+      router.push('/home');
+    }
+  }, [postStatus, router]);
 
   return (
     <>
@@ -182,23 +97,16 @@ export default function ComposeTweet() {
             <Avatar src={user.avatar} />
           </section>
         )}
-        <form>
+        <form onSubmit={handleSubmit}>
           <textarea
             placeholder="¿Qué está pasando?"
             value={message}
             onChange={handleChange}
-            onSubmit={handleSubmit}
-            onDragEnter={handleDragEnter}
-            onDragLeave={handleDragLeave}
-            onDrop={handleDrop}
+            ref={dragRef}
           ></textarea>
           <div>
             <Button disabled={isButtonDisabled}>
-              {taskInfo?.progress > 0 ? (
-                <p>{taskInfo.progress} %</p>
-              ) : (
-                'Devitear'
-              )}
+              {isUploading ? <p>{progress} %</p> : 'Devitear'}
             </Button>
           </div>
           <div>
@@ -213,7 +121,7 @@ export default function ComposeTweet() {
         </div>
       )}
 
-      {file !== null && (
+      {file && (
         <section className="remove-img">
           <button onClick={handleDeleteImage}>ⓧ</button>
           <img src={URL.createObjectURL(file)} alt="Uploaded image" />
@@ -237,7 +145,7 @@ export default function ComposeTweet() {
           width: 100%;
           min-height: 13rem;
           height: auto;
-          border: ${drag === DRAG_IMAGE_STATES.DRAG_OVER
+          border: ${dragStatus === DRAG_STATES.DRAG_OVER
             ? '3pt dashed #09f'
             : '3pt solid transparent'};
           border-radius: 0.7rem;

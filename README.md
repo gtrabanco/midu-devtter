@@ -1,34 +1,60 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Curso de NextJS, el framework de React ⚛️, desde cero
 
-## Getting Started
+## ¿Cómo funciona?
 
-First, run the development server:
+Cada clase tiene una rama con su código finalizado.
+La rama `master` sería empezar desde cero el proyecto y podrías seguir desde el primer vídeo.
 
-```bash
-npm run dev
-# or
-yarn dev
-```
+### [1. Aprendiendo NextJS desde cero](https://youtu.be/2jxc8DMzt0I)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+[![Aprendiendo React desde cero](https://img.youtube.com/vi/2jxc8DMzt0I/mqdefault.jpg)](https://youtu.be/2jxc8DMzt0I)
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+[📝 Código](https://github.com/midudev/curso-nextjs-twitter-clone/tree/01-introducci%C3%B3n-a-next-js) - [▶️ Vídeo](https://youtu.be/2jxc8DMzt0I)
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+---
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+### [2. Login con GitHub usando Firebase y más Styled JSX](https://youtu.be/UlYGGCNFcWo)
 
-## Learn More
+[![Aprendiendo React desde cero](https://img.youtube.com/vi/UlYGGCNFcWo/mqdefault.jpg)](https://www.youtube.com/watch?v=UlYGGCNFcWo)
 
-To learn more about Next.js, take a look at the following resources:
+[📝 Código](https://github.com/midudev/curso-nextjs-twitter-clone/tree/02-styled-jsx-login-con-github) - [▶️ Vídeo](https://youtu.be/2jxc8DMzt0I)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+### [3. Creando la página Home y configurando ESLINT y PRETTIER en nuestro proyecto](https://www.youtube.com/watch?v=EEDRcolSHms)
 
-## Deploy on Vercel
+[![Aprendiendo React desde cero](https://img.youtube.com/vi/EEDRcolSHms/mqdefault.jpg)](https://www.youtube.com/watch?v=EEDRcolSHms)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+[📝 Código](https://github.com/midudev/curso-nextjs-twitter-clone/tree/03-add-lint-and-prettier-and-more) - [▶️ Vídeo](https://youtu.be/EEDRcolSHms)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+---
+
+### [4. Usando Firestore de Firebase para crear y leer tweets](https://www.youtube.com/watch?v=W5y79Je-Rfs)
+
+[![Aprendiendo React desde cero](https://img.youtube.com/vi/W5y79Je-Rfs/mqdefault.jpg)](https://www.youtube.com/watch?v=W5y79Je-Rfs)
+
+[📝 Código](https://github.com/midudev/curso-nextjs-twitter-clone/tree/04-firestore-for-creating-tweets) - [▶️ Vídeo](https://youtu.be/W5y79Je-Rfs)
+
+---
+
+### [5. Subir imágenes en Firebase Storage y crear TimeAgo desde cero](https://www.youtube.com/watch?v=AiyiiXXChwo)
+
+[![Aprendiendo React desde cero](https://img.youtube.com/vi/AiyiiXXChwo/mqdefault.jpg)](https://www.youtube.com/watch?v=AiyiiXXChwo)
+
+[📝 Código](https://github.com/midudev/curso-nextjs-twitter-clone/tree/05-upload-images-firebase-storage-timeago-without-deps) - [▶️ Vídeo](https://youtu.be/W5y79Je-Rfs)
+
+---
+
+### [6. Rutas dinámicas y data fetching en NextJS](https://www.youtube.com/watch?v=i16PlS9aTJU)
+
+[![Aprendiendo React desde cero](https://img.youtube.com/vi/i16PlS9aTJU/mqdefault.jpg)](https://www.youtube.com/watch?v=i16PlS9aTJU)
+
+[📝 Código](https://github.com/midudev/curso-nextjs-twitter-clone/tree/06-dynamic-routing-data-fetching) - [▶️ Vídeo](https://youtu.be/i16PlS9aTJU)
+
+---
+
+### [7. Actualizaciones en tiempo real con Firestore y archivos .ENV en NextJS](https://www.youtube.com/watch?v=8ZA2p1SBssk)
+
+[![Aprendiendo React desde cero](https://img.youtube.com/vi/8ZA2p1SBssk/mqdefault.jpg)](https://www.youtube.com/watch?v=8ZA2p1SBssk)
+
+[📝 Código](https://github.com/midudev/curso-nextjs-twitter-clone/tree/07-realtime-firestore-environment-variables) - [▶️ Vídeo](https://youtu.be/8ZA2p1SBssk)

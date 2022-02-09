@@ -39,6 +39,8 @@ export default function DevitPage(props) {
     }
   }, [devit, router]);
 
+  if (router.isFallback) return <h1>Loading...</h1>;
+
   return (
     <>
       <Head>

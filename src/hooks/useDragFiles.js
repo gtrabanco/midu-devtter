@@ -76,8 +76,8 @@ export default function useDragFiles({
     };
 
     ref?.current?.addEventListener('drop', handleDrop);
-    ref?.current?.addEventListener('DragEnter', handleDragEnter);
-    ref?.current?.addEventListener('DragLeave', handleDragLeave);
+    ref?.current?.addEventListener('dragenter', handleDragEnter);
+    ref?.current?.addEventListener('dragleave', handleDragLeave);
   }, [
     ref,
     onDropComplete,

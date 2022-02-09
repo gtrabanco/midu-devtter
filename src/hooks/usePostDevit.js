@@ -33,7 +33,6 @@ export default function usePostDevit({ onError = () => {} } = {}) {
     const { avatar, userName, userId, content, file = null } = devit;
     // Empty file or not empty file and we know the imgURL
     if (devit !== emptyDevit && (file === null || (file !== null && imgURL))) {
-      console.log(file, devit);
       setStatus(POST_DEVIT_STATUS.POSTING);
       addDevit({ avatar, userName, userId, content, imgURL })
         .then(() => setStatus(POST_DEVIT_STATUS.COMPLETED))

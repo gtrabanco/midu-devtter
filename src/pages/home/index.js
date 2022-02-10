@@ -2,25 +2,27 @@ import Devit from 'components/Devit';
 import Create from 'components/icons/Create';
 import Home from 'components/icons/Home';
 import Search from 'components/icons/Search';
-import { fetchLatestDevits } from 'fb/client';
+import { listenLatestDevits } from 'fb/client';
 import useUser from 'hooks/useUser';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { colors } from 'styles/theme';
 
-export default function HomePage() {
+export default function HomePageMemo() {
   const [timeline, setTimeline] = useState([]);
   const { user } = useUser();
 
   useEffect(() => {
-    user &&
-      fetchLatestDevits()
-        .then((data) => {
-          setTimeline(data);
-        })
-        .catch(() => setTimeline([]));
+    let unsubscribe = () => {};
+    if (user) {
+      unsubscribe = listenLatestDevits(setTimeline);
+    }
+    return () => {
+      unsubscribe();
+    };
   }, [setTimeline, user]);
+
   return (
     <>
       <Head>

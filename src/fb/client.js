@@ -11,6 +11,7 @@ import {
   collection,
   getDocs,
   getFirestore,
+  onSnapshot,
   orderBy,
   query,
   Timestamp,
@@ -91,6 +92,18 @@ export function addDevit({ avatar, userName, userId, content, imgURL = null }) {
   });
 }
 
+function mapDocDevitToDevitObject(doc) {
+  const data = doc.data();
+  const id = doc.id;
+  const { createdAt } = data;
+  // const intl = new Intl.DateTimeFormat('es-ES');
+  // const normalizedCreatedAt = intl.format(createdAt.toDate());
+  const normalizedCreatedAt = createdAt.toDate();
+  const timeago = createdAt.timeAgo('es-ES');
+
+  return { ...data, id, createdAt: normalizedCreatedAt, timeago };
+}
+
 export function fetchLatestDevits() {
   const devitsRef = collection(db, 'devits');
 
@@ -100,18 +113,17 @@ export function fetchLatestDevits() {
   );
 
   return getDocs(queryOrderByDateCreated).then((snapshot) => {
-    return snapshot.docs.map((doc) => {
-      const data = doc.data();
-      const id = doc.id;
-      const { createdAt } = data;
-      // const intl = new Intl.DateTimeFormat('es-ES');
-      // const normalizedCreatedAt = intl.format(createdAt.toDate());
-      const normalizedCreatedAt = createdAt.toDate();
-      const timeago = createdAt.timeAgo('es-ES');
-
-      return { ...data, id, createdAt: normalizedCreatedAt, timeago };
-    });
+    return snapshot.docs.map(mapDocDevitToDevitObject);
   });
+}
+
+export function listenLatestDevits(callback) {
+  const colRef = collection(db, 'devits');
+  const queryOrderByDateCreated = query(colRef, orderBy('createdAt', 'desc'));
+
+  return onSnapshot(queryOrderByDateCreated, ({ docs }) =>
+    callback(docs.map(mapDocDevitToDevitObject))
+  );
 }
 
 export function uploadImage(file) {

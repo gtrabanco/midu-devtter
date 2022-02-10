@@ -40,11 +40,18 @@ export default function DevitPage(props) {
     }
   }, [devit, router]);
 
+  const handleClick = () => {
+    router.back();
+  };
+
   return (
     <>
       <Head>
         <title>Devitter | {devit?.content ?? 'Devit'}</title>
       </Head>
+      <header>
+        <button onClick={handleClick}>&lt; Atrás</button>
+      </header>
       {devit && (
         <Devit
           id={devit?.id}
@@ -57,6 +64,28 @@ export default function DevitPage(props) {
           userId={devit?.userId}
         />
       )}
+      <style jsx>{`
+        header {
+          align-items: center;
+          background: #ffffffaa;
+          backdrop-filter: blur(5px);
+          border-bottom: 1px solid #eee;
+          height: 49px;
+          display: flex;
+          position: sticky;
+          top: 0;
+          width: 100%;
+        }
+        button {
+          background: transparent;
+          border: none;
+          border-radius: 5rem;
+          font-size: 1rem;
+        }
+        button:hover {
+          color: #09f;
+        }
+      `}</style>
     </>
   );
 }

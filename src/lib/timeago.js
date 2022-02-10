@@ -1,3 +1,10 @@
+import { DEFAULT_LANGUAGE } from 'constants/locale';
+
+const isDateTimeSupported = typeof Intl !== 'undefined' && Intl.DateTimeFormat;
+
+const isRelativeTimeFormatSupported =
+  typeof Intl !== 'undefined' && Intl.RelativeTimeFormat;
+
 const DATE_UNITS = {
   date: 2419200,
   week: 604800,
@@ -6,6 +13,25 @@ const DATE_UNITS = {
   minute: 60,
   second: 1,
 };
+
+export function dateTimeFormat(date, locale = DEFAULT_LANGUAGE || 'en-GB') {
+  try {
+    if (isDateTimeSupported) {
+      const formater = Intl.DateTimeFormat(locale, { dateStyle: 'short' });
+
+      return formater.format(date);
+    }
+  } catch (e) {}
+
+  const options = {
+    weekday: 'short',
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+  };
+
+  return date.toLocaleDateString(locale, options);
+}
 
 export function secsAgo(date) {
   const dateTimestamp = +date;
@@ -28,19 +54,16 @@ export function unitValue(date) {
   }
 }
 
-export default function timeAgo(date, locale = 'en-GB') {
-  const { value = 0, unit = 'second' } = unitValue(date);
-
+export default function timeAgo(date, locale = DEFAULT_LANGUAGE || 'en-GB') {
   try {
-    let formater;
-    if (unit === 'date') {
-      formater = Intl.DateTimeFormat(locale, { dateStyle: 'short' });
-    } else {
-      formater = new Intl.RelativeTimeFormat(locale, 'short');
+    if (isRelativeTimeFormatSupported) {
+      const { value = 0, unit = 'second' } = unitValue(date);
+      if (unit !== 'date') {
+        const formater = new Intl.RelativeTimeFormat(locale, 'short');
+        return formater.format(value, unit);
+      }
     }
-
-    return formater.format(value, unit);
   } catch (e) {}
 
-  return value;
+  return dateTimeFormat(date, locale);
 }

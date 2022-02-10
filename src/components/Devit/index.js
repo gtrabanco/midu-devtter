@@ -1,4 +1,5 @@
 import Avatar from 'components/Avatar';
+import { dateTimeFormat } from 'lib/timeago';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
@@ -13,6 +14,7 @@ export default function Devit({
   userid = null,
 }) {
   const router = useRouter();
+  const formatedCreatedAt = dateTimeFormat(createdat);
 
   const handleNavigation = (event) => {
     event.preventDefault();
@@ -37,7 +39,7 @@ export default function Devit({
               as={`/status/${id}`}
             >
               <a>
-                <time className="date" title={createdat}>
+                <time className="date" title={formatedCreatedAt}>
                   {timeago}
                 </time>
               </a>

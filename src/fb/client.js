@@ -1,4 +1,4 @@
-import { initializeApp } from 'firebase/app';
+import { getApp, getApps, initializeApp } from 'firebase/app';
 import {
   getAuth,
   GithubAuthProvider,
@@ -24,17 +24,15 @@ Timestamp.prototype.timeAgo = function (locale = 'en-GB') {
 };
 
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: 'AIzaSyDo22nmM-YcKa7Dix-0AVFHWlDJk_7NSD8',
-  authDomain: 'devtter-442e7.firebaseapp.com',
-  projectId: 'devtter-442e7',
-  storageBucket: 'devtter-442e7.appspot.com',
-  messagingSenderId: '358428276622',
-  appId: '1:358428276622:web:52f6bafa6a758222e496df',
-  measurementId: 'G-N4TJB19440',
-};
+const firebaseConfig = JSON.parse(process.env.NEXT_PUBLIC_FIREBASE_CONFIG);
 
-const app = initializeApp(firebaseConfig);
+let app;
+
+if (getApps().length === 0) {
+  app = initializeApp(firebaseConfig);
+} else {
+  app = getApp();
+}
 const auth = getAuth(app);
 const db = getFirestore(app);
 const storage = getStorage(app);

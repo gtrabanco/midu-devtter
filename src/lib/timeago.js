@@ -30,6 +30,10 @@ export function dateTimeFormat(date, locale = DEFAULT_LANGUAGE || 'en-GB') {
     day: 'numeric',
   };
 
+  if (!(date instanceof Date)) {
+    date = new Date(date);
+  }
+
   return date.toLocaleDateString(locale, options);
 }
 
